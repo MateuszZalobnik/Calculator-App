@@ -1,5 +1,6 @@
-import React, { MutableRefObject, RefObject } from 'react';
+import React from 'react';
 import styled from 'styled-components';
+import { inputs } from 'consts/inputConsts';
 
 const Wrapper = styled.div`
   display: flex;
@@ -58,20 +59,46 @@ const ResultWrapper = styled.div`
 `;
 
 const Display: React.FC<{
-  firstValue: string;
-  secondValue: string;
-  symbol: string;
-}> = ({ firstValue, secondValue, symbol }) => {
+  result: number | string;
+  symbolRef: any;
+  firstValueRef: any;
+  secondValueRef: any;
+}> = ({ secondValueRef, symbolRef, firstValueRef, result }) => {
   return (
     <Wrapper>
       <InputsWrapper>
-        <NumberInput type="number" value={firstValue} />
-        <SymbolInput type="text" pattern="[+-/*]" value={symbol} />
-        <NumberInput type="number" value={secondValue} />
+        <NumberInput
+          type="number"
+          ref={firstValueRef}
+          onChange={(e) => {
+            firstValueRef.current.value = e.target.value;
+          }}
+        />
+        <SymbolInput
+          type="text"
+          ref={symbolRef}
+          onChange={(e) => {
+            if (
+              e.target.value == inputs.addition ||
+              e.target.value == inputs.subtraction ||
+              e.target.value == inputs.division ||
+              e.target.value == inputs.multiplication
+            ) {
+              symbolRef.current.value = e.target.value;
+            }
+          }}
+        />
+        <NumberInput
+          type="number"
+          ref={secondValueRef}
+          onChange={(e) => {
+            secondValueRef.current.value = e.target.value;
+          }}
+        />
       </InputsWrapper>
       <ResultWrapper>
         <span>=</span>
-        <div>1000</div>
+        <div>{result}</div>
       </ResultWrapper>
     </Wrapper>
   );

@@ -1,5 +1,6 @@
 import Button from 'components/atoms/Button/Button';
-import React, { useState } from 'react';
+import { inputs } from 'consts/inputConsts';
+import React from 'react';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
@@ -11,31 +12,29 @@ const Wrapper = styled.div`
   grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
 `;
 
-const inputs = {
-  multiplication: '*',
-  division: '/',
-  addition: '+',
-  subtraction: '-',
-  equal: '=',
-  clearAll: 'AC',
-};
-
 const Keyboard: React.FC<{
-  setFirstValue: (newValue: string) => void;
-  setSecondValue: (newValue: string) => void;
-  setSymbol: (newValue: string) => void;
-  firstValue: string;
-  secondValue: string;
-  symbol: string;
-}> = ({
-  setFirstValue,
-  setSecondValue,
-  setSymbol,
-  firstValue,
-  secondValue,
-  symbol,
-}) => {
-  const [field, setField] = useState(true);
+  setResult: (value: string | number) => void;
+  symbolRef: any;
+  firstValueRef: any;
+  secondValueRef: any;
+}> = ({ secondValueRef, symbolRef, firstValueRef, setResult }) => {
+  const calculate = (action: string, a: number, b: number) => {
+    switch (action) {
+      case inputs.addition:
+        setResult(a + b);
+        break;
+      case inputs.subtraction:
+        setResult(a - b);
+        break;
+      case inputs.multiplication:
+        setResult(a * b);
+        break;
+      case inputs.division:
+        b != 0 ? setResult(a / b) : setResult('nie można dzielić przez zero');
+        break;
+    }
+  };
+
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     const value = event.currentTarget.value;
     if (
@@ -44,18 +43,28 @@ const Keyboard: React.FC<{
       value == inputs.multiplication ||
       value == inputs.division
     ) {
-      setSymbol(value);
+      symbolRef.current.focus();
+      symbolRef.current.value = value;
     } else if (value == inputs.clearAll) {
-      setFirstValue('');
-      setSecondValue('');
-      setSymbol('');
-    } else if (symbol == '' || firstValue == '') {
-      setFirstValue(value);
+      firstValueRef.current.value = '';
+      secondValueRef.current.value = '';
+      symbolRef.current.value = '';
+    } else if (
+      symbolRef.current.value == '' ||
+      firstValueRef.current.value == ''
+    ) {
+      firstValueRef.current.focus();
+      firstValueRef.current.value += value;
+    } else if (value == inputs.equal) {
+      calculate(
+        symbolRef.current.value,
+        Number(firstValueRef.current.value),
+        Number(secondValueRef.current.value)
+      );
     } else {
-      setSecondValue(value);
+      secondValueRef.current.focus();
+      secondValueRef.current.value += value;
     }
-    // else if (value >= 0 || value <= 9) {
-    // }
   };
   return (
     <Wrapper>
@@ -75,7 +84,7 @@ const Keyboard: React.FC<{
       <Button value="3" onClick={handleClick} />
       <Button value="C" onClick={handleClick} />
       <Button value="0" onClick={handleClick} />
-      <Button value="." onClick={handleClick} />
+      <Button value="," onClick={handleClick} />
       <Button value={inputs.equal} onClick={handleClick} light />
     </Wrapper>
   );

@@ -1,6 +1,6 @@
 import Display from 'components/molecules/Display/Display';
 import Keyboard from 'components/molecules/Keyboard/Keyboard';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
@@ -13,23 +13,24 @@ const Wrapper = styled.div`
 `;
 
 const Calculator: React.FC = () => {
-  const [firstValue, setFirstValue] = useState('');
-  const [secondValue, setSecondValue] = useState('');
-  const [symbol, setSymbol] = useState('');
+  const [result, setResult] = useState<number | string>('');
+  const symbolRef = useRef<HTMLInputElement>();
+  const firstValueRef = useRef<HTMLInputElement>();
+  const secondValueRef = useRef<HTMLInputElement>();
+
   return (
     <Wrapper>
       <Display
-        firstValue={firstValue}
-        secondValue={secondValue}
-        symbol={symbol}
+        result={result}
+        symbolRef={symbolRef}
+        firstValueRef={firstValueRef}
+        secondValueRef={secondValueRef}
       />
       <Keyboard
-        setFirstValue={setFirstValue}
-        setSecondValue={setSecondValue}
-        setSymbol={setSymbol}
-        firstValue={firstValue}
-        secondValue={secondValue}
-        symbol={symbol}
+        setResult={setResult}
+        symbolRef={symbolRef}
+        firstValueRef={firstValueRef}
+        secondValueRef={secondValueRef}
       />
     </Wrapper>
   );
