@@ -16,6 +16,11 @@ export const theme = {
     xl: '35px',
     xxl: '45px',
   },
+  fontWeight: {
+    s: '200',
+    m: '400',
+    l: '600',
+  },
   borderRadius: {
     s: '4px',
     m: '20px',

@@ -1,5 +1,8 @@
 import Button from 'components/atoms/Button/Button';
+import { firebase } from 'consts/firebaseConsts';
 import { inputs } from 'consts/inputConsts';
+import { Timestamp } from 'firebase/firestore';
+import useFirestore from 'hooks/useFirestore/useFirestore';
 import React, { RefObject, useEffect } from 'react';
 import styled from 'styled-components';
 
@@ -31,21 +34,36 @@ const Keyboard: React.FC<{
   setLastResult,
   result,
 }) => {
+  const { addDocument } = useFirestore();
+
   const calculate = (action: string, a: number, b: number) => {
+    let currentResult: number | null = null;
     switch (action) {
       case inputs.addition:
         setResult(a + b);
-
+        currentResult = a + b;
         break;
       case inputs.subtraction:
         setResult(a - b);
+        currentResult = a - b;
         break;
       case inputs.multiplication:
         setResult(a * b);
+        currentResult = a * b;
         break;
       case inputs.division:
-        b != 0 ? setResult(a / b) : setResult('nie można dzielić przez zero');
+        if (b != 0) {
+          setResult(a / b);
+          currentResult = a / b;
+        } else setResult('nie można dzielić przez zero');
         break;
+    }
+    if (currentResult) {
+      addDocument(firebase.collections.calculations, {
+        expression: String(a) + ' ' + action + ' ' + String(b),
+        result: String(currentResult),
+        timestamp: Timestamp.now(),
+      });
     }
   };
 

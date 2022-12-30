@@ -5,7 +5,7 @@ html {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'IBM Plex Mono', monospace;
   }
   
   *, *::after, *::before {
@@ -16,10 +16,10 @@ html {
     box-sizing: border-box;
     margin: 0;
     padding: 0px;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'IBM Plex Mono', monospace;
   }
   
   a, button {
-    font-family: 'Poppins', sans-serif;
+    font-family: 'IBM Plex Mono', monospace;
   }
 `;

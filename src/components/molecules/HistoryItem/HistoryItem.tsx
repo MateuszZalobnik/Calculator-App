@@ -1,5 +1,5 @@
-import { db } from 'firebase-config/firebase-config';
-import { deleteDoc, doc } from 'firebase/firestore';
+import { firebase } from 'consts/firebaseConsts';
+import useFirestore from 'hooks/useFirestore/useFirestore';
 import React, { useState, useEffect } from 'react';
 import { XCircle } from 'react-bootstrap-icons';
 import styled from 'styled-components';
@@ -18,6 +18,7 @@ const Wrapper = styled.div`
 const ExpressionWrapper = styled.div`
   display: flex;
   justify-content: space-between;
+  font-weight: ${({ theme }) => theme.fontWeight.s};
 `;
 
 const DateWrapper = styled.div`
@@ -31,6 +32,7 @@ const DateWrapper = styled.div`
 const ResultWrapper = styled.div`
   display: flex;
   justify-content: space-between;
+  font-weight: ${({ theme }) => theme.fontWeight.l};
   font-size: ${({ theme }) => theme.fontSize.xl};
 `;
 
@@ -50,7 +52,7 @@ const HistoryItem: React.FC<{
   id: string;
 }> = ({ expression, result, seconds, id }) => {
   const [date, setDate] = useState('');
-
+  const { deleteDocument } = useFirestore();
   const displayData = () => {
     const data = new Date(seconds * 1000);
     const dateString = data.toLocaleDateString('en-US', {
@@ -65,7 +67,7 @@ const HistoryItem: React.FC<{
   };
 
   const handleDelete = async (id: string) => {
-    await deleteDoc(doc(db, 'calculations', id));
+    deleteDocument(firebase.collections.calculations, id);
   };
 
   useEffect(() => {

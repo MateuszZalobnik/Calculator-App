@@ -6,7 +6,7 @@ import { BrowserRouter } from 'react-router-dom';
 import Calculator from 'components/organisms/Calculator/Calculator';
 import Header from 'components/molecules/Header/Header';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import History from 'components/organisms/History/History';
+import HomePage from 'components/organisms/HomePage/HomePage';
 
 const Wrapper = styled.div`
   position: relative;
@@ -39,7 +39,7 @@ const App: React.FC = () => {
           <ContentWrapper>
             <Header />
             <Routes>
-              <Route path="/" element={<History />} />
+              <Route path="/" element={<HomePage />} />
               <Route path="/calculator" element={<Calculator />} />
               <Route path="*" element={<Navigate replace to="/" />} />
             </Routes>

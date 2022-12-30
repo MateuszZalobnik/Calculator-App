@@ -19,7 +19,7 @@ const Wrapper = styled.button<Props>`
     props.value == '='
       ? 'grid-column-start: 4; grid-row-start: 3; grid-row-end: 6;'
       : null}
-  font-weight: 700;
+  font-weight: ${({ theme }) => theme.fontWeight.s};
   border: none;
   border-radius: ${({ theme }) => theme.borderRadius.s};
   cursor: pointer;
@@ -28,7 +28,7 @@ const Wrapper = styled.button<Props>`
   ${({ theme }) => theme.mq.desktop} {
     padding: 10px;
   }
-  `;
+`;
 
 const Button: React.FC<{
   value: string | number;
