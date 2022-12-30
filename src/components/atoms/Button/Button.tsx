@@ -25,13 +25,15 @@ const Wrapper = styled.button<Props>`
   cursor: pointer;
   border-right: 1px solid ${({ theme }) => theme.colors.black};
   border-bottom: 1px solid ${({ theme }) => theme.colors.black};
-`;
+  ${({ theme }) => theme.mq.desktop} {
+    padding: 10px;
+  }
+  `;
 
 const Button: React.FC<{
   value: string | number;
   light?: boolean;
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
-  props?: any;
 }> = ({ light = false, value, onClick }) => {
   return (
     <Wrapper onClick={onClick} light={light} value={value}>

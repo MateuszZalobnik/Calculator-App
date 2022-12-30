@@ -1,27 +1,41 @@
 import Button from 'components/atoms/Button/Button';
 import { inputs } from 'consts/inputConsts';
-import React from 'react';
+import React, { RefObject, useEffect } from 'react';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
-  height: 45vh;
-  padding: 20px;
+  padding: 2px;
   display: grid;
-  gap: 20px 20px;
+  gap: 2px 2px;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+  height: 50vh;
+  ${({ theme }) => theme.mq.desktop} {
+    height: max-content;
+    padding: 10px;
+  }
 `;
 
 const Keyboard: React.FC<{
+  result: number | string;
+  setLastResult: (value: string | null) => void;
   setResult: (value: string | number) => void;
-  symbolRef: any;
-  firstValueRef: any;
-  secondValueRef: any;
-}> = ({ secondValueRef, symbolRef, firstValueRef, setResult }) => {
+  symbolRef: RefObject<HTMLInputElement>;
+  firstValueRef: RefObject<HTMLInputElement>;
+  secondValueRef: RefObject<HTMLInputElement>;
+}> = ({
+  secondValueRef,
+  symbolRef,
+  firstValueRef,
+  setResult,
+  setLastResult,
+  result,
+}) => {
   const calculate = (action: string, a: number, b: number) => {
     switch (action) {
       case inputs.addition:
         setResult(a + b);
+
         break;
       case inputs.subtraction:
         setResult(a - b);
@@ -35,37 +49,109 @@ const Keyboard: React.FC<{
     }
   };
 
+  const clearAll = () => {
+    firstValueRef.current ? (firstValueRef.current.value = '') : null;
+    secondValueRef.current ? (secondValueRef.current.value = '') : null;
+    symbolRef.current ? (symbolRef.current.value = '') : null;
+    setResult('');
+  };
+
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     const value = event.currentTarget.value;
-    if (
+
+    if (value == inputs.clearAll) {
+      clearAll();
+      setLastResult('');
+    } else if (
       value == inputs.addition ||
       value == inputs.subtraction ||
       value == inputs.multiplication ||
       value == inputs.division
     ) {
-      symbolRef.current.focus();
-      symbolRef.current.value = value;
-    } else if (value == inputs.clearAll) {
-      firstValueRef.current.value = '';
-      secondValueRef.current.value = '';
-      symbolRef.current.value = '';
-    } else if (
-      symbolRef.current.value == '' ||
-      firstValueRef.current.value == ''
-    ) {
-      firstValueRef.current.focus();
-      firstValueRef.current.value += value;
+      if (
+        symbolRef.current?.value != '' &&
+        firstValueRef.current?.value != '' &&
+        secondValueRef.current?.value != '' &&
+        result != ''
+      ) {
+        setLastResult(
+          firstValueRef.current?.value +
+            ' ' +
+            symbolRef.current?.value +
+            ' ' +
+            secondValueRef.current?.value +
+            ' = ' +
+            String(result)
+        );
+      }
+      symbolRef.current?.focus();
+      symbolRef.current ? (symbolRef.current.value = value) : null;
     } else if (value == inputs.equal) {
-      calculate(
-        symbolRef.current.value,
-        Number(firstValueRef.current.value),
-        Number(secondValueRef.current.value)
+      if (
+        symbolRef.current &&
+        firstValueRef.current &&
+        secondValueRef.current
+      ) {
+        calculate(
+          symbolRef.current.value,
+          Number(firstValueRef.current.value),
+          Number(secondValueRef.current.value)
+        );
+      }
+    } else if (
+      symbolRef.current?.value != '' &&
+      firstValueRef.current?.value != '' &&
+      secondValueRef.current?.value != '' &&
+      result != '' &&
+      !isNaN(Number(value))
+    ) {
+      setLastResult(
+        firstValueRef.current?.value +
+          ' ' +
+          symbolRef.current?.value +
+          ' ' +
+          secondValueRef.current?.value +
+          ' = ' +
+          String(result)
       );
+      clearAll();
+      firstValueRef.current?.focus();
+      firstValueRef.current ? (firstValueRef.current.value += value) : null;
+    } else if (
+      symbolRef.current?.value == '' ||
+      firstValueRef.current?.value == ''
+    ) {
+      firstValueRef.current?.focus();
+      firstValueRef.current ? (firstValueRef.current.value += value) : null;
     } else {
-      secondValueRef.current.focus();
-      secondValueRef.current.value += value;
+      secondValueRef.current?.focus();
+      secondValueRef.current ? (secondValueRef.current.value += value) : null;
     }
   };
+
+  useEffect(() => {
+    const handleKeyPress = (event: KeyboardEvent) => {
+      if (
+        event.key === 'Enter' &&
+        symbolRef.current &&
+        firstValueRef.current &&
+        secondValueRef.current
+      ) {
+        calculate(
+          symbolRef.current.value,
+          Number(firstValueRef.current.value),
+          Number(secondValueRef.current.value)
+        );
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+    };
+  }, []);
+
   return (
     <Wrapper>
       <Button value={inputs.clearAll} onClick={handleClick} />
@@ -84,7 +170,7 @@ const Keyboard: React.FC<{
       <Button value="3" onClick={handleClick} />
       <Button value="C" onClick={handleClick} />
       <Button value="0" onClick={handleClick} />
-      <Button value="," onClick={handleClick} />
+      <Button value={'.'} onClick={handleClick} />
       <Button value={inputs.equal} onClick={handleClick} light />
     </Wrapper>
   );

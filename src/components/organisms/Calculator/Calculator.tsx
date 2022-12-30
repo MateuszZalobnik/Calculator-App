@@ -5,18 +5,20 @@ import styled from 'styled-components';
 
 const Wrapper = styled.div`
   width: 100%;
-  min-height: max-content;
   background-color: ${({ theme }) => theme.colors.primary};
-  border-radius: ${({ theme }) => theme.borderRadius.m};
   display: flex;
   flex-direction: column;
+  ${({ theme }) => theme.mq.desktop} {
+    border-radius: ${({ theme }) => theme.borderRadius.m};
+  }
 `;
 
 const Calculator: React.FC = () => {
   const [result, setResult] = useState<number | string>('');
-  const symbolRef = useRef<HTMLInputElement>();
-  const firstValueRef = useRef<HTMLInputElement>();
-  const secondValueRef = useRef<HTMLInputElement>();
+  const [lastResult, setLastResult] = useState<string | null>(null);
+  const symbolRef = useRef<HTMLInputElement>(null);
+  const firstValueRef = useRef<HTMLInputElement>(null);
+  const secondValueRef = useRef<HTMLInputElement>(null);
 
   return (
     <Wrapper>
@@ -25,8 +27,11 @@ const Calculator: React.FC = () => {
         symbolRef={symbolRef}
         firstValueRef={firstValueRef}
         secondValueRef={secondValueRef}
+        lastResult={lastResult}
       />
       <Keyboard
+        setLastResult={setLastResult}
+        result={result}
         setResult={setResult}
         symbolRef={symbolRef}
         firstValueRef={firstValueRef}

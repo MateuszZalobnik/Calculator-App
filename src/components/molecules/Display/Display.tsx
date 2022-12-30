@@ -1,12 +1,16 @@
-import React from 'react';
+import React, { ChangeEvent, RefObject } from 'react';
 import styled from 'styled-components';
 import { inputs } from 'consts/inputConsts';
 
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  height: 15vh;
-  padding: 20px 20px 0px 20px;
+  padding: 80px 20px 0px 20px;
+  height: 50vh;
+  ${({ theme }) => theme.mq.desktop} {
+    padding: 15px 15px 10vh 15px;
+    height: max-content;
+  }
 `;
 
 const InputsWrapper = styled.div`
@@ -31,7 +35,6 @@ const NumberInput = styled.input`
   color: ${({ theme }) => theme.colors.secondary};
   border-radius: ${({ theme }) => theme.borderRadius.s};
   font-size: ${({ theme }) => theme.fontSize.l};
-  text-align: end;
   border: none;
   :focus {
     outline: 2px solid ${({ theme }) => theme.colors.secondary};
@@ -53,25 +56,36 @@ const SymbolInput = styled.input`
 
 const ResultWrapper = styled.div`
   display: flex;
-  margin-top: 20px;
+  margin-top: 5px;
   justify-content: space-between;
   font-size: ${({ theme }) => theme.fontSize.xl};
 `;
 
+const LastResultWrapper = styled.div`
+  display: flex;
+  margin-top: 5px;
+  justify-content: end;
+  font-size: ${({ theme }) => theme.fontSize.m};
+`;
+
 const Display: React.FC<{
+  lastResult: string | null;
   result: number | string;
-  symbolRef: any;
-  firstValueRef: any;
-  secondValueRef: any;
-}> = ({ secondValueRef, symbolRef, firstValueRef, result }) => {
+  symbolRef: RefObject<HTMLInputElement>;
+  firstValueRef: RefObject<HTMLInputElement>;
+  secondValueRef: RefObject<HTMLInputElement>;
+}> = ({ secondValueRef, symbolRef, firstValueRef, result, lastResult }) => {
   return (
     <Wrapper>
       <InputsWrapper>
         <NumberInput
           type="number"
+          pattern="^\d*(\.\d{0,2})?$"
           ref={firstValueRef}
-          onChange={(e) => {
-            firstValueRef.current.value = e.target.value;
+          onChange={(e: ChangeEvent<HTMLInputElement>) => {
+            firstValueRef.current
+              ? (firstValueRef.current.value = e.target.value)
+              : '222';
           }}
         />
         <SymbolInput
@@ -84,7 +98,11 @@ const Display: React.FC<{
               e.target.value == inputs.division ||
               e.target.value == inputs.multiplication
             ) {
-              symbolRef.current.value = e.target.value;
+              symbolRef.current
+                ? (symbolRef.current.value = e.target.value)
+                : null;
+            } else {
+              symbolRef.current ? (symbolRef.current.value = '') : null;
             }
           }}
         />
@@ -92,10 +110,13 @@ const Display: React.FC<{
           type="number"
           ref={secondValueRef}
           onChange={(e) => {
-            secondValueRef.current.value = e.target.value;
+            secondValueRef.current
+              ? (secondValueRef.current.value = e.target.value)
+              : null;
           }}
         />
       </InputsWrapper>
+      {lastResult ? <LastResultWrapper>{lastResult}</LastResultWrapper> : null}
       <ResultWrapper>
         <span>=</span>
         <div>{result}</div>

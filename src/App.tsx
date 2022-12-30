@@ -9,11 +9,15 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import History from 'components/organisms/History/History';
 
 const Wrapper = styled.div`
+  position: relative;
   display: flex;
   justify-content: center;
-  align-items: center;
-  height: 100vh;
+  align-items: end;
+  min-height: 100vh;
   background-color: ${({ theme }) => theme.colors.darkGrey};
+  ${({ theme }) => theme.mq.desktop} {
+    align-items: center;
+  }
 `;
 
 const ContentWrapper = styled.div`
@@ -21,6 +25,9 @@ const ContentWrapper = styled.div`
   justify-content: center;
   flex-direction: column;
   color: ${({ theme }) => theme.colors.secondary};
+  ${({ theme }) => theme.mq.desktop} {
+    width: 50%;
+  }
 `;
 
 const App: React.FC = () => {
