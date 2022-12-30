@@ -39,8 +39,8 @@ const App: React.FC = () => {
           <ContentWrapper>
             <Header />
             <Routes>
-              <Route path="/" element={<Calculator />} />
-              <Route path="/history" element={<History />} />
+              <Route path="/" element={<History />} />
+              <Route path="/calculator" element={<Calculator />} />
               <Route path="*" element={<Navigate replace to="/" />} />
             </Routes>
           </ContentWrapper>

@@ -46,13 +46,13 @@ const Header: React.FC = () => {
         to="/"
         className={({ isActive }) => (isActive ? 'active' : undefined)}
       >
-        <CalculatorIcon />
+        <ClockHistory />
       </StyledNavLink>
       <StyledNavLink
-        to="/history"
+        to="/calculator"
         className={({ isActive }) => (isActive ? 'active' : undefined)}
       >
-        <ClockHistory />
+        <CalculatorIcon />
       </StyledNavLink>
     </Wrapper>
   );
