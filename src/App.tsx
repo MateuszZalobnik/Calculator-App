@@ -24,7 +24,7 @@ const ContentWrapper = styled.div`
   display: flex;
   justify-content: center;
   flex-direction: column;
-  color: ${({ theme }) => theme.colors.secondary};
+  color: ${({ theme }) => theme.colors.green};
   ${({ theme }) => theme.mq.desktop} {
     width: 50%;
   }

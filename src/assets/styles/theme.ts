@@ -5,9 +5,11 @@ export const theme = {
     grey: '#D9D9D9',
     darkGrey: '#292929',
     darkBlue: '#27272D',
+    green: '#35D927',
+    darkGreen: '#24A716',
     primary: '#1B1D1D',
-    secondary: '#35D927',
-    danger: 'red',
+    red: 'red',
+    darkRed: '#a10808',
   },
   fontSize: {
     xs: '11px',
