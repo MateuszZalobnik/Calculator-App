@@ -10,6 +10,7 @@ export const theme = {
     danger: 'red',
   },
   fontSize: {
+    xs: '11px',
     s: '15px',
     m: '20px',
     l: '25px',
@@ -27,6 +28,8 @@ export const theme = {
     l: '30px',
   },
   mq: {
+    smartphone: '@media (min-width: 360px)',
+    tablet: '@media (min-width: 500px)',
     desktop: '@media (min-width: 1024px)',
     bigDesktop: '@media (min-width: 1280px)',
     huge: '@media (min-width: 1440px)',

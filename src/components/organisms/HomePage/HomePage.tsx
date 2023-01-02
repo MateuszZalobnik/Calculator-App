@@ -46,17 +46,21 @@ const HomePage: React.FC = () => {
 
   return (
     <Wrapper>
-      {items.map((item: DocumentData) => {
-        return (
-          <HistoryItem
-            key={item.id}
-            expression={item.expression}
-            result={item.result}
-            seconds={item.timestamp.seconds}
-            id={item.id}
-          />
-        );
-      })}
+      {items.length != 0 ? (
+        items.map((item: DocumentData) => {
+          return (
+            <HistoryItem
+              key={item.id}
+              expression={item.expression}
+              result={item.result}
+              seconds={item.timestamp.seconds}
+              id={item.id}
+            />
+          );
+        })
+      ) : (
+        <span>Brak obliczeń</span>
+      )}
     </Wrapper>
   );
 };

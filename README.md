@@ -19,6 +19,6 @@ React Router Dom
 ```wsl
 npx creat-react-app my-app --template typescript
 cd my-app
-npm i react-router-dom firebase react-bootstrap-icons
+npm i react-router-dom firebase react-bootstrap-icons decimal.js
 npm i -D prettier @types/styled-components
 ```

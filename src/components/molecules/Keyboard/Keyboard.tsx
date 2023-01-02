@@ -5,6 +5,7 @@ import { Timestamp } from 'firebase/firestore';
 import useFirestore from 'hooks/useFirestore/useFirestore';
 import React, { RefObject, useEffect } from 'react';
 import styled from 'styled-components';
+import Decimal from 'decimal.js';
 
 const Wrapper = styled.div`
   padding: 2px;
@@ -20,6 +21,8 @@ const Wrapper = styled.div`
 `;
 
 const Keyboard: React.FC<{
+  setFocus: (value: number | null) => void;
+  focus: number | null;
   result: number | string;
   setLastResult: (value: string | null) => void;
   setResult: (value: string | number) => void;
@@ -33,32 +36,30 @@ const Keyboard: React.FC<{
   setResult,
   setLastResult,
   result,
+  setFocus,
+  focus,
 }) => {
   const { addDocument } = useFirestore();
-
   const calculate = (action: string, a: number, b: number) => {
     let currentResult: number | null = null;
     switch (action) {
       case inputs.addition:
-        setResult(a + b);
-        currentResult = a + b;
+        currentResult = Number(new Decimal(a).plus(b)); //floating point arithmetic error solve
         break;
       case inputs.subtraction:
-        setResult(a - b);
-        currentResult = a - b;
+        currentResult = Number(new Decimal(a).minus(b)); //floating point arithmetic error solve
         break;
       case inputs.multiplication:
-        setResult(a * b);
         currentResult = a * b;
         break;
       case inputs.division:
         if (b != 0) {
-          setResult(a / b);
           currentResult = a / b;
         } else setResult('nie można dzielić przez zero');
         break;
     }
     if (currentResult) {
+      setResult(currentResult);
       addDocument(firebase.collections.calculations, {
         expression: String(a) + ' ' + action + ' ' + String(b),
         result: String(currentResult),
@@ -74,18 +75,48 @@ const Keyboard: React.FC<{
     setResult('');
   };
 
+  const floatValidation = (Ref: RefObject<HTMLInputElement>, value: string) => {
+    if (Ref.current) {
+      if (Ref.current.value.includes('.') && value != '.') {
+        Ref.current.value += value;
+      } else if (!Ref.current.value.includes('.')) {
+        Ref.current.value += value;
+      }
+    }
+  };
+
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     const value = event.currentTarget.value;
 
     if (value == inputs.clearAll) {
       clearAll();
       setLastResult('');
+      setFocus(null);
+    } else if (value == inputs.clear) {
+      if (focus == 0) {
+        firstValueRef.current ? (firstValueRef.current.value = '') : null;
+      } else if (focus == 1) {
+        secondValueRef.current ? (secondValueRef.current.value = '') : null;
+      } else if (
+        firstValueRef.current?.value != '' &&
+        secondValueRef.current?.value != ''
+      ) {
+        secondValueRef.current ? (secondValueRef.current.value = '') : null;
+      } else if (
+        symbolRef.current?.value != '' &&
+        secondValueRef.current?.value == ''
+      ) {
+        symbolRef.current ? (symbolRef.current.value = '') : null;
+      } else {
+        clearAll();
+      }
     } else if (
       value == inputs.addition ||
       value == inputs.subtraction ||
       value == inputs.multiplication ||
       value == inputs.division
     ) {
+      setFocus(null);
       if (
         symbolRef.current?.value != '' &&
         firstValueRef.current?.value != '' &&
@@ -115,7 +146,14 @@ const Keyboard: React.FC<{
           Number(firstValueRef.current.value),
           Number(secondValueRef.current.value)
         );
+        setFocus(null);
       }
+    } else if (focus == 0) {
+      firstValueRef.current?.focus();
+      floatValidation(firstValueRef, value);
+    } else if (focus == 1) {
+      secondValueRef.current?.focus();
+      floatValidation(secondValueRef, value);
     } else if (
       symbolRef.current?.value != '' &&
       firstValueRef.current?.value != '' &&
@@ -136,14 +174,14 @@ const Keyboard: React.FC<{
       firstValueRef.current?.focus();
       firstValueRef.current ? (firstValueRef.current.value += value) : null;
     } else if (
-      symbolRef.current?.value == '' ||
-      firstValueRef.current?.value == ''
+      firstValueRef.current &&
+      (symbolRef.current?.value == '' || firstValueRef.current?.value == '')
     ) {
-      firstValueRef.current?.focus();
-      firstValueRef.current ? (firstValueRef.current.value += value) : null;
-    } else {
+      firstValueRef.current.focus();
+      floatValidation(firstValueRef, value);
+    } else if (secondValueRef.current) {
       secondValueRef.current?.focus();
-      secondValueRef.current ? (secondValueRef.current.value += value) : null;
+      floatValidation(secondValueRef, value);
     }
   };
 

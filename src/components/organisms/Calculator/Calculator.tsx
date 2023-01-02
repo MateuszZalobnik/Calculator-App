@@ -10,6 +10,8 @@ const Wrapper = styled.div`
   flex-direction: column;
   ${({ theme }) => theme.mq.desktop} {
     border-radius: ${({ theme }) => theme.borderRadius.m};
+    border-right: 3px solid ${({ theme }) => theme.colors.black};
+    border-bottom: 4px solid ${({ theme }) => theme.colors.black};
   }
 `;
 
@@ -19,10 +21,12 @@ const Calculator: React.FC = () => {
   const symbolRef = useRef<HTMLInputElement>(null);
   const firstValueRef = useRef<HTMLInputElement>(null);
   const secondValueRef = useRef<HTMLInputElement>(null);
+  const [focus, setFocus] = useState<number | null>(null); // 0-first input 1-second input
 
   return (
     <Wrapper>
       <Display
+        setFocus={setFocus}
         result={result}
         symbolRef={symbolRef}
         firstValueRef={firstValueRef}
@@ -30,6 +34,8 @@ const Calculator: React.FC = () => {
         lastResult={lastResult}
       />
       <Keyboard
+        setFocus={setFocus}
+        focus={focus}
         setLastResult={setLastResult}
         result={result}
         setResult={setResult}

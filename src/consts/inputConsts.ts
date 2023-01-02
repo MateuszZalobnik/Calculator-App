@@ -5,4 +5,5 @@ export const inputs = {
     subtraction: '-',
     equal: '=',
     clearAll: 'AC',
+    clear: 'C',
   };

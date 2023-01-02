@@ -15,34 +15,97 @@ const Wrapper = styled.div`
   border-radius: ${({ theme }) => theme.borderRadius.s};
 `;
 
-const ExpressionWrapper = styled.div`
+interface ExpressionProps {
+  length: number;
+}
+
+const ExpressionWrapper = styled.div<ExpressionProps>`
   display: flex;
   justify-content: space-between;
   font-weight: ${({ theme }) => theme.fontWeight.s};
+
+  font-size: ${({ length, theme }) => {
+    if (length > 20) {
+      return theme.fontSize.xs;
+    } else if (length > 10) {
+      return theme.fontSize.s;
+    } else {
+      return theme.fontSize.m;
+    }
+  }};
+  ${({ theme }) => theme.mq.smartphone} {
+    font-size: ${({ length, theme }) => {
+      if (length > 15) {
+        return theme.fontSize.m;
+      } else if (length > 10) {
+        return theme.fontSize.s;
+      } else {
+        return theme.fontSize.m;
+      }
+    }};
+  }
+  ${({ theme }) => theme.mq.tablet} {
+    font-size: ${({ theme }) => theme.fontSize.l};
+  }
 `;
 
 const DateWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: ${({ theme }) => theme.fontSize.s};
   color: ${({ theme }) => theme.colors.grey};
+  font-size: ${({ theme }) => theme.fontSize.xs};
+
+  ${({ theme }) => theme.mq.tablet} {
+    font-size: ${({ theme }) => theme.fontSize.s};
+  }
 `;
 
-const ResultWrapper = styled.div`
+interface ResultProps {
+  length: number;
+}
+
+const ResultWrapper = styled.div<ResultProps>`
   display: flex;
   justify-content: space-between;
   font-weight: ${({ theme }) => theme.fontWeight.l};
-  font-size: ${({ theme }) => theme.fontSize.xl};
+  font-size: ${({ length, theme }) => {
+    if (length > 20) {
+      return theme.fontSize.s;
+    } else if (length > 10) {
+      return theme.fontSize.m;
+    }
+  }};
+  ${({ theme }) => theme.mq.smartphone} {
+    font-size: ${({ length, theme }) => {
+      if (length > 15) {
+        return theme.fontSize.l;
+      } else if (length > 20) {
+        return theme.fontSize.m;
+      } else {
+        return theme.fontSize.l;
+      }
+    }};
+  }
+  ${({ theme }) => theme.mq.tablet} {
+    font-size: ${({ theme }) => theme.fontSize.l};
+  }
+  ${({ theme }) => theme.mq.desktop} {
+    font-size: ${({ theme }) => theme.fontSize.xl};
+  }
 `;
 
 const RemoveButton = styled.button`
   background-color: ${({ theme }) => theme.colors.darkBlue};
   border: none;
-  font-size: ${({ theme }) => theme.fontSize.m};
   color: ${({ theme }) => theme.colors.danger};
-  margin-right: 10px;
+  margin-right: 0px;
   cursor: pointer;
+  font-size: ${({ theme }) => theme.fontSize.s};
+  ${({ theme }) => theme.mq.tablet} {
+    margin-right: 10px;
+    font-size: ${({ theme }) => theme.fontSize.m};
+  }
 `;
 
 const HistoryItem: React.FC<{
@@ -76,7 +139,7 @@ const HistoryItem: React.FC<{
 
   return (
     <Wrapper>
-      <ExpressionWrapper>
+      <ExpressionWrapper length={result.length}>
         <DateWrapper>
           <RemoveButton onClick={() => handleDelete(id)}>
             <XCircle />
@@ -85,7 +148,7 @@ const HistoryItem: React.FC<{
         </DateWrapper>
         {expression}
       </ExpressionWrapper>
-      <ResultWrapper>
+      <ResultWrapper length={result.length}>
         <span>=</span>
         <span>{result}</span>
       </ResultWrapper>
