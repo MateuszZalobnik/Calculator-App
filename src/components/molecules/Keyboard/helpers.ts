@@ -103,7 +103,6 @@ export const handleKeyboard = (
       value == inputs.multiplication ||
       value == inputs.division
     ) {
-      setFocus(null);
       if (
         symbolRef.current.value != '' &&
         firstValueRef.current.value != '' &&
@@ -122,6 +121,7 @@ export const handleKeyboard = (
       }
       symbolRef.current.focus();
       symbolRef.current.value = value;
+      setFocus(1);
     } else if (value == inputs.equal) {
       setResult(
         calculate(

@@ -1,8 +1,13 @@
-import React, { ChangeEvent, RefObject } from 'react';
+import React, { ChangeEvent, RefObject, useState, useEffect } from 'react';
 import { inputs } from 'consts/inputConsts';
-import { InputsWrapper, LastResultWrapper, NumberInput, ResultWrapper, SymbolInput, Wrapper } from './Display.style';
-
-
+import {
+  InputsWrapper,
+  LastResultWrapper,
+  NumberInput,
+  ResultWrapper,
+  SymbolInput,
+  Wrapper,
+} from './Display.style';
 
 const Display: React.FC<{
   setFocus: (value: number | null) => void;
@@ -19,6 +24,7 @@ const Display: React.FC<{
   lastResult,
   setFocus,
 }) => {
+  const [width, setWidth] = useState(window.innerWidth);
   const handleChange = (
     //prevent from letters and other chars
     event: ChangeEvent<HTMLInputElement>,
@@ -39,13 +45,22 @@ const Display: React.FC<{
     }
   };
 
+  useEffect(() => {
+    const handleResize = () => setWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   return (
     <Wrapper>
       <InputsWrapper>
         <NumberInput
           type="text" //type number not allow comma and dot using rendered keyboard
-          inputMode="numeric" //inputmode display number keyboard on smartphones
+          inputMode="numeric" //readonly not work on every device and inputmode display number keyboard on smartphones
           ref={firstValueRef}
+          readOnly={width <= 1024 ? true : false}
           onFocus={() => setFocus(0)}
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
             handleChange(e, firstValueRef);
@@ -54,6 +69,8 @@ const Display: React.FC<{
         <SymbolInput
           type="text"
           ref={symbolRef}
+          readOnly={width <= 1024 ? true : false}
+          onFocus={() => setFocus(1)}
           onChange={(e) => {
             if (
               e.target.value == inputs.addition ||
@@ -71,8 +88,9 @@ const Display: React.FC<{
         />
         <NumberInput
           type="text" //type number not allow comma and dot using rendered keyboard
-          inputMode="numeric" //inputmode display number keyboard on smartphones
+          inputMode="numeric" //readonly not work on every device and inputmode display number keyboard on smartphones
           ref={secondValueRef}
+          readOnly={width <= 1024 ? true : false}
           onFocus={() => setFocus(1)}
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
             handleChange(e, secondValueRef);

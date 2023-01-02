@@ -1,7 +1,7 @@
 import Button from 'components/atoms/Button/Button';
 import { inputs } from 'consts/inputConsts';
-import React, { RefObject, useEffect } from 'react';
-import { calculate, clearAll, handleKeyboard } from './helpers';
+import React, { RefObject, useEffect, useRef } from 'react';
+import { handleKeyboard } from './helpers';
 import { Wrapper } from './Keyboard.style';
 
 const Keyboard: React.FC<{
@@ -23,6 +23,7 @@ const Keyboard: React.FC<{
   setFocus,
   focus,
 }) => {
+  const buttonRef = useRef<HTMLButtonElement>(null);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     handleKeyboard(
       event,
@@ -45,29 +46,7 @@ const Keyboard: React.FC<{
         firstValueRef.current &&
         secondValueRef.current
       ) {
-        setResult(
-          calculate(
-            symbolRef.current.value,
-            Number(firstValueRef.current.value),
-            Number(secondValueRef.current.value)
-          )
-        );
-        setLastResult(
-          firstValueRef.current?.value +
-            ' ' +
-            symbolRef.current?.value +
-            ' ' +
-            secondValueRef.current?.value +
-            ' = ' +
-            calculate(
-              symbolRef.current.value,
-              Number(firstValueRef.current.value),
-              Number(secondValueRef.current.value)
-            )
-        );
-        clearAll(firstValueRef, secondValueRef, symbolRef);
-        firstValueRef.current.focus();
-        setFocus(0);
+        buttonRef.current?.click();
       }
     };
 
@@ -97,7 +76,12 @@ const Keyboard: React.FC<{
       <Button value="C" onClick={handleClick} />
       <Button value="0" onClick={handleClick} />
       <Button value={'.'} onClick={handleClick} />
-      <Button value={inputs.equal} onClick={handleClick} light />
+      <Button
+        value={inputs.equal}
+        onClick={handleClick}
+        light
+        Ref={buttonRef}
+      />
     </Wrapper>
   );
 };
