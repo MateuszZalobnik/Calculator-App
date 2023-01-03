@@ -72,7 +72,25 @@ export const handleKeyboard = (
   const handleClearAll = () => {
     clearAll(firstValueRef, secondValueRef, symbolRef);
   };
+
   if (firstValueRef.current && secondValueRef.current && symbolRef.current) {
+      if (
+        symbolRef.current.value != '' &&
+        firstValueRef.current.value != '' &&
+        secondValueRef.current.value != '' &&
+        result != ''
+      ) {
+        setLastResult(
+          firstValueRef.current.value +
+            ' ' +
+            symbolRef.current.value +
+            ' ' +
+            secondValueRef.current?.value +
+            ' = ' +
+            String(result)
+        );
+      }
+
     if (value == inputs.clearAll) {
       handleClearAll();
       setLastResult('');
@@ -93,6 +111,12 @@ export const handleKeyboard = (
         secondValueRef.current.value == ''
       ) {
         symbolRef.current.value = '';
+      } else if (
+        symbolRef.current.value == '' &&
+        secondValueRef.current.value == '' &&
+        firstValueRef.current.value != ''
+      ) {
+        firstValueRef.current.value = '';
       } else {
         handleClearAll();
         setResult('');
@@ -103,22 +127,7 @@ export const handleKeyboard = (
       value == inputs.multiplication ||
       value == inputs.division
     ) {
-      if (
-        symbolRef.current.value != '' &&
-        firstValueRef.current.value != '' &&
-        secondValueRef.current.value != '' &&
-        result != ''
-      ) {
-        setLastResult(
-          firstValueRef.current.value +
-            ' ' +
-            symbolRef.current.value +
-            ' ' +
-            secondValueRef.current?.value +
-            ' = ' +
-            String(result)
-        );
-      }
+      setResult('');
       symbolRef.current.focus();
       symbolRef.current.value = value;
       setFocus(1);
@@ -134,9 +143,11 @@ export const handleKeyboard = (
     } else if (focus == 0) {
       firstValueRef.current.focus();
       floatValidation(firstValueRef, value);
+      setResult('');
     } else if (focus == 1) {
       secondValueRef.current?.focus();
       floatValidation(secondValueRef, value);
+      setResult('');
     } else if (
       symbolRef.current.value != '' &&
       firstValueRef.current.value != '' &&
@@ -163,9 +174,11 @@ export const handleKeyboard = (
     ) {
       firstValueRef.current.focus();
       floatValidation(firstValueRef, value);
+      setResult('');
     } else if (secondValueRef.current) {
       secondValueRef.current.focus();
       floatValidation(secondValueRef, value);
+      setResult('');
     }
   }
 };

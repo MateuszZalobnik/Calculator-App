@@ -2,8 +2,13 @@ import { firebase } from 'consts/firebaseConsts';
 import useFirestore from 'hooks/useFirestore/useFirestore';
 import React, { useState, useEffect } from 'react';
 import { XCircle } from 'react-bootstrap-icons';
-import { DateWrapper, ExpressionWrapper, RemoveButton, ResultWrapper, Wrapper } from './HistoryItem.style';
-
+import {
+  DateWrapper,
+  ExpressionWrapper,
+  RemoveButton,
+  ResultWrapper,
+  Wrapper,
+} from './HistoryItem.style';
 
 const HistoryItem: React.FC<{
   expression: string;
@@ -36,15 +41,13 @@ const HistoryItem: React.FC<{
 
   return (
     <Wrapper>
-      <ExpressionWrapper length={result.length}>
-        <DateWrapper>
-          <RemoveButton onClick={() => handleDelete(id)}>
-            <XCircle />
-          </RemoveButton>
-          {date}
-        </DateWrapper>
-        {expression}
-      </ExpressionWrapper>
+      <DateWrapper>
+        <RemoveButton onClick={() => handleDelete(id)}>
+          <XCircle />
+        </RemoveButton>
+        {date}
+      </DateWrapper>
+      <ExpressionWrapper length={result.length}>{expression}</ExpressionWrapper>
       <ResultWrapper length={result.length}>
         <span>=</span>
         <span>{result}</span>

@@ -17,9 +17,9 @@ interface ExpressionProps {
 
 export const ExpressionWrapper = styled.div<ExpressionProps>`
   display: flex;
-  justify-content: space-between;
+  justify-content: end;
   font-weight: ${({ theme }) => theme.fontWeight.s};
-
+  text-align: right;
   font-size: ${({ length, theme }) => {
     if (length > 20) {
       return theme.fontSize.xs;
@@ -47,8 +47,7 @@ export const ExpressionWrapper = styled.div<ExpressionProps>`
 
 export const DateWrapper = styled.div`
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: justify;
   color: ${({ theme }) => theme.colors.grey};
   font-size: ${({ theme }) => theme.fontSize.xs};
 

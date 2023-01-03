@@ -4,10 +4,10 @@ export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   padding: 80px 20px 0px 20px;
-  height: 50vh;
+  min-height: 50vh;
   ${({ theme }) => theme.mq.desktop} {
     padding: 15px 15px 10vh 15px;
-    height: max-content;
+    min-height: max-content;
   }
 `;
 

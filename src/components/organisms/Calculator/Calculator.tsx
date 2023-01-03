@@ -26,6 +26,7 @@ const Calculator: React.FC = () => {
   return (
     <Wrapper>
       <Display
+        setResult={setResult}
         setFocus={setFocus}
         result={result}
         symbolRef={symbolRef}

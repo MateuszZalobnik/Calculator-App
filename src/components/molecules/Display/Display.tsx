@@ -10,6 +10,7 @@ import {
 } from './Display.style';
 
 const Display: React.FC<{
+  setResult: (value: string | number) => void;
   setFocus: (value: number | null) => void;
   lastResult: string | null;
   result: number | string;
@@ -23,6 +24,7 @@ const Display: React.FC<{
   result,
   lastResult,
   setFocus,
+  setResult,
 }) => {
   const [width, setWidth] = useState(window.innerWidth);
   const handleChange = (
@@ -30,6 +32,7 @@ const Display: React.FC<{
     event: ChangeEvent<HTMLInputElement>,
     Ref: RefObject<HTMLInputElement>
   ) => {
+    setResult('');
     const regex = /^[0-9]*\.?[0-9]*$/;
     if (Ref.current) {
       if (regex.test(event.target.value) && event.target.value != ',') {
@@ -84,6 +87,7 @@ const Display: React.FC<{
             } else {
               symbolRef.current ? (symbolRef.current.value = '') : null;
             }
+            setResult('');
           }}
         />
         <NumberInput

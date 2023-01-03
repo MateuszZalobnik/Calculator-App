@@ -6,7 +6,7 @@ export const Wrapper = styled.div`
   gap: 2px 2px;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
-  height: 50vh;
+  min-height: 50vh;
   ${({ theme }) => theme.mq.desktop} {
     height: max-content;
     padding: 10px;
