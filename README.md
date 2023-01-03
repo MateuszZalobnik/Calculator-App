@@ -1,4 +1,4 @@
-# Calculator app
+# [Calculator app](https://mateuszzalobnik.github.io/calculator-app/)
 
 React web application with calculator function. App saves calculation in firebase.
 
